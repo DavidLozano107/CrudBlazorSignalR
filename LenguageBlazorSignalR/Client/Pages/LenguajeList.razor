@@ -8,7 +8,7 @@
 <h2>Lenguaje link details</h2>
 
 <p>
-	<a href="/" class="btn btn-primary">Create new lenguage</a>
+	<a href="AddLenguage" class="btn btn-primary">Create new lenguage</a>
 </p>
 
 
@@ -24,6 +24,7 @@ else
 				<th>Name</th>
 				<th>WebSite</th>
 				<th>Extensions</th>
+				<th>  </th>
 			</tr>
 		</thead>
 		<tbody>
@@ -33,6 +34,7 @@ else
 					<td>@lenguage.Name</td>
 					<td>@lenguage.WebSite</td>
 					<td>@lenguage.Extensions</td>
+					<td><button @onclick="()=> EditLenguage(lenguage.Id)">Edit</button></td>
 				</tr>
 			}
 		</tbody>
@@ -45,7 +47,7 @@ else
 	private HubConnection hubConnection;
 
 
-	protected async override Task OnInitializedAsync()
+	protected override async Task OnInitializedAsync()
 	{
 		hubConnection = new HubConnectionBuilder().WithUrl(navigationManager.ToAbsoluteUri("/lenguajesHub")).Build();
 
@@ -74,4 +76,6 @@ else
 	{
 		_ = hubConnection.DisposeAsync();
 	}
+
+	public void EditLenguage(int Id) => navigationManager.NavigateTo($"/EditLenguage/{Id}");
 }

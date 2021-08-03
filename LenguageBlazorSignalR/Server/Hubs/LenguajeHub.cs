@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace LenguageBlazorSignalR.Server.Hubs
 {
 	public class LenguajeHub : Hub
-		
 	{
 
 		public async Task SendMessage()

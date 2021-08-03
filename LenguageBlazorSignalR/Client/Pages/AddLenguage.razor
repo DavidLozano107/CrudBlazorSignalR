@@ -39,15 +39,53 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col">
+			<div class="form-group">
+				<input type="button" class="btn btn-primary" value="Save" @onclick="CreateLenguage" />
+				<input type="button" class="btn btn-secondary" value="Cancel" @onclick="Cancel" />
+			</div>
+		</div>
+	</div>
 </EditForm>
 
 @code {
 
 	ProgrammingLanguage ProgrammingLanguage =  new ProgrammingLanguage();
-	
 
+	private HubConnection HubConnection;
 
+	protected  override async Task OnInitializedAsync()
+	{
+		HubConnection = new HubConnectionBuilder()
+			.WithUrl(navigationManager
+			.ToAbsoluteUri("/lenguajesHub"))
+			.Build();
 
+		await HubConnection.StartAsync();
 
+	}
+
+	protected async Task CreateLenguage()
+	{
+		await HttpClient.PostAsJsonAsync("api/ProgrammingLanguages", ProgrammingLanguage);
+		//SendMensage
+		if (isConnected()) await SendMessage();
+
+		navigationManager.NavigateTo("lenguajeList");
+	}
+
+	protected Task SendMessage() => HubConnection.SendAsync("SendMessage");
+	public bool isConnected() => HubConnection.State == HubConnectionState.Connected;
+
+	public void Disponse()
+	{
+		_ = HubConnection.DisposeAsync();
+	}
+
+	protected void Cancel()
+	{
+		navigationManager.NavigateTo("lenguajeList");
+	}
 
 }
