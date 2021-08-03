@@ -1,0 +1,53 @@
+﻿@page "/AddLenguage"
+@using Microsoft.AspNetCore.SignalR.Client
+
+@inject NavigationManager navigationManager;
+@inject HttpClient HttpClient;
+
+<h3>Create lenguage</h3>
+
+<EditForm Model="ProgrammingLanguage">
+	<div class="row">
+		<div class="col">
+			<div class="form-group">
+				<label for="Name" class="custom-control-label">Name</label>
+				<InputText @bind-Value="ProgrammingLanguage.Name" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<div class="form-group">
+				<label for="Name" class="custom-control-label">WebSite</label>
+				<InputText @bind-Value="ProgrammingLanguage.WebSite" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<div class="form-group">
+				<label for="Name" class="custom-control-label">Extensions</label>
+				<InputText @bind-Value="ProgrammingLanguage.Extensions" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<div class="form-group">
+				<label for="Name" class="custom-control-label">Name</label>
+				<InputText @bind-Value="ProgrammingLanguage.Name" />
+			</div>
+		</div>
+	</div>
+</EditForm>
+
+@code {
+
+	ProgrammingLanguage ProgrammingLanguage =  new ProgrammingLanguage();
+	
+
+
+
+
+
+}

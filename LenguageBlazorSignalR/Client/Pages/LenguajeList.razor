@@ -1,0 +1,77 @@
+﻿@page "/lenguajeList"
+@using Microsoft.AspNetCore.SignalR.Client
+
+@inject NavigationManager navigationManager;
+@inject HttpClient HttpClient;
+
+
+<h2>Lenguaje link details</h2>
+
+<p>
+	<a href="/" class="btn btn-primary">Create new lenguage</a>
+</p>
+
+
+@if (LenguagesList == null)
+{
+	<p>Loading..</p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>WebSite</th>
+				<th>Extensions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var lenguage in LenguagesList)
+			{
+				<tr>
+					<td>@lenguage.Name</td>
+					<td>@lenguage.WebSite</td>
+					<td>@lenguage.Extensions</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@code {
+	public List<ProgrammingLanguage> LenguagesList { get; set; }
+	private HubConnection hubConnection;
+
+
+	protected async override Task OnInitializedAsync()
+	{
+		hubConnection = new HubConnectionBuilder().WithUrl(navigationManager.ToAbsoluteUri("/lenguajesHub")).Build();
+
+		hubConnection.On("receiveMessage",  ()=>
+		{
+			CallGetAllLenguage();
+			StateHasChanged();
+		});
+
+		await hubConnection.StartAsync();
+		await GetAllLanguages();
+	}
+
+	public void CallGetAllLenguage()
+	{
+		Task.Run(async () => await GetAllLanguages());
+	}
+
+	protected async Task GetAllLanguages()
+	{
+		LenguagesList = await HttpClient.GetFromJsonAsync<List<ProgrammingLanguage>>("api/programmingLanguages");
+		StateHasChanged();
+	}
+
+	public void Dispose()
+	{
+		_ = hubConnection.DisposeAsync();
+	}
+}
