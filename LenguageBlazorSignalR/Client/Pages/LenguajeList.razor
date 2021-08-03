@@ -35,6 +35,7 @@ else
 					<td>@lenguage.WebSite</td>
 					<td>@lenguage.Extensions</td>
 					<td><button @onclick="()=> EditLenguage(lenguage.Id)">Edit</button></td>
+					<td><button @onclick="()=> DeleteLenguage(lenguage.Id)">Delete</button></td>
 				</tr>
 			}
 		</tbody>
@@ -78,4 +79,20 @@ else
 	}
 
 	public void EditLenguage(int Id) => navigationManager.NavigateTo($"/EditLenguage/{Id}");
-}
+
+	public async Task DeleteLenguage(int Id)
+	{
+		await HttpClient.DeleteAsync($"api/programmingLanguages/{Id}");
+
+		if (IsConnection())
+		{
+			await SendMessage();
+		}
+		
+	}
+
+	public bool IsConnection() => hubConnection.State == HubConnectionState.Connected;
+	public  Task SendMessage() => hubConnection.SendAsync("SendMessage");
+
+
+	}
